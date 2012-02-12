@@ -28,4 +28,25 @@ describe Ffnpdf::Story do
     story.error.should == "Story does not exist (#{story.story_url})"
   end
 
+  context "pulling" do
+    before :each do
+      @story = Ffnpdf::Story.new("1234567")
+      @story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+    end
+
+    after :each do
+      if File.directory?("1234567") 
+        FileUtils.rm_rf("1234567")
+      end
+    end
+
+    it "should create a story directory" do
+      pwd = Dir.pwd
+      @story.pull_story
+      Dir.pwd.should == pwd
+      File.should be_directory("1234567")
+      File.should exist("1234567/0000.md")
+    end
+  end
+
 end

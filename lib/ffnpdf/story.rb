@@ -1,4 +1,5 @@
 require 'httparty'
+require 'nokogiri'
 
 module Ffnpdf
   class Story
@@ -29,6 +30,21 @@ module Ffnpdf
       custom_url ? "#{@custom_url}s/#{@story_id}/" : "#{FFN_URL}s/#{@story_id}/"
     end
 
-
+    def pull_story
+      return unless check_story
+      FileUtils.mkdir_p @story_id
+      Dir.chdir @story_id
+      tempfile = File.new("temp.html", "w")
+      pull = HTTParty.get(story_url)
+      doc = Nokogiri::HTML(pull.body)
+      doc.css(".storytext p").each do |paragraph|
+        tempfile.puts paragraph
+      end
+      tempfile.close
+      #puts File.size? "temp.html"
+      `pandoc temp.html -o 0000.md`
+      #IO.foreach("0000.md"){|block| puts block}
+      Dir.chdir "../" 
+    end
   end
 end

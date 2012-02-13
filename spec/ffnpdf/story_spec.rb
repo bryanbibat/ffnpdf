@@ -45,8 +45,54 @@ describe Ffnpdf::Story do
       @story.pull_story
       Dir.pwd.should == pwd
       File.should be_directory("1234567")
-      File.should exist("1234567/0000.md")
+      File.should exist("1234567/0001.md")
     end
   end
 
+  context "building" do
+    after :each do
+      if File.directory?("1234567") 
+        FileUtils.rm_rf("1234567")
+      end
+    end
+
+    it "should check non existence of directory" do
+      story = Ffnpdf::Story.new("1234567")
+      story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+      story.check_story_dir.should == false
+      story.error.should == "Story folder does not exist (1234567/)"
+    end
+
+    it "should check existence of directory" do
+      story = Ffnpdf::Story.new("1234567")
+      story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+      story.pull_story
+      story = Ffnpdf::Story.new("1234567")
+      story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+      story.check_story_dir.should == true
+    end
+  end
+
+  context "pulling multi" do
+    before :each do
+      @story = Ffnpdf::Story.new("0000001")
+      @story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+    end
+
+    after :each do
+      if File.directory?("0000001") 
+        FileUtils.rm_rf("0000001")
+      end
+    end
+
+    it "should create a story directory" do
+      pwd = Dir.pwd
+      @story.pull_story
+      Dir.pwd.should == pwd
+      File.should be_directory("0000001")
+      File.should exist("0000001/0001.md")
+      File.should exist("0000001/0002.md")
+      File.should exist("0000001/0003.md")
+    end
+  end
 end

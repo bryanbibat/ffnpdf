@@ -14,7 +14,12 @@ module Ffnpdf
           $stderr.puts story.error
         end
       elsif argv[0] == "build"
-
+        story = Ffnpdf::Story.new(argv[1])
+        if story.check_story_directory
+          story.build_story
+        else
+          $stderr.puts story.error
+        end
       else
         invalid = true
       end

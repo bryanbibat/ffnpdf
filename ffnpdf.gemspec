@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Ffnpdf::VERSION
   s.authors     = ["Bryan Bibat"]
   s.email       = ["bry@bryanbibat.net"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/bryanbibat/ffnpdf"
   s.summary     = %q{PDF generator for FF.net stories}
   s.description = %q{Scrapes a story off FF.net, converts it to Markdown, and turns it to PDF with LaTeX}
 
@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "test_notifier"
   s.add_development_dependency "autotest"
-  s.add_development_dependency "fakefs"
   s.add_development_dependency "nokogiri"
   s.add_development_dependency "httparty"
   s.add_runtime_dependency "nokogiri"

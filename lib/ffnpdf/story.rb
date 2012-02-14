@@ -68,6 +68,7 @@ module Ffnpdf
       Dir.chdir @story_id
       
       tempfile = File.new("temp.html", "w")
+      puts "pulling first chapter"
       pull = HTTParty.get(story_url)
       doc = Nokogiri::HTML(pull.body)
       doc.css(".storytext")[0].children.each do |paragraph|
@@ -91,6 +92,7 @@ module Ffnpdf
         append_header_to_ch1
 
         (2..chapters).each do |chapter| 
+          puts "pulling chapter #{chapter}"
           tempfile = File.new("temp.html", "w")
           tempfile.puts "<h2>Chapter #{chapter}</h2>"
           pull = HTTParty.get("#{story_url}#{chapter}/")
@@ -172,8 +174,8 @@ $body$
     def generate_title_page
       title_page = File.new("0000.md", "w")
       contents = <<-CONTENTS
-\\thispagestyle{empty}
 \\maketitle
+\\pagenumbering{roman}
 \\tableofcontents
 
       CONTENTS
@@ -183,6 +185,9 @@ $body$
 
     def append_header_to_ch1
       chapter1 = File.new("0001.temp", "w")
+      chapter1.puts "\\pagenumbering{arabic}"
+      chapter1.puts "\\setcounter{page}{1}"
+      chapter1.puts
       chapter1.puts "\#\# Chapter 1"
       chapter1.puts
       IO.foreach("0001.md") do |line|
@@ -200,6 +205,7 @@ $body$
     end
 
     def combine_mds
+      puts "combining chapters"
       combined = File.new("#{@story_id}/combined.md", "w")
       chapter_mds.each do |chapter|
         IO.foreach("#{chapter}") do |line|

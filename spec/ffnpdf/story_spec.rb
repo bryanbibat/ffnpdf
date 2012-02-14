@@ -120,7 +120,7 @@ describe Ffnpdf::Story do
 
     after :each do
       if File.directory?("0000001") 
-        #FileUtils.rm_rf("0000001")
+        FileUtils.rm_rf("0000001")
       end
     end
 

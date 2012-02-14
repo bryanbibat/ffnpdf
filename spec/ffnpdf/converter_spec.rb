@@ -9,6 +9,7 @@ describe Ffnpdf::Converter do
       Ffnpdf::Converter.exec("rm temp.txt")
       Ffnpdf::Converter.exec("pwd > temp.txt")
       File.exists?("temp.txt").should == true
+      Ffnpdf::Converter.exec("rm temp.txt")
     end
   end
 end

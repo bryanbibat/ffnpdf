@@ -46,6 +46,9 @@ describe Ffnpdf::Story do
       Dir.pwd.should == pwd
       File.should be_directory("1234567")
       File.should exist("1234567/0001.md")
+      File.should exist("1234567/0000.md")
+      File.should exist("1234567/variables.txt")
+      File.should exist("1234567/xetex.template")
     end
   end
 
@@ -63,6 +66,18 @@ describe Ffnpdf::Story do
       story.error.should == "Story folder does not exist (1234567/)"
     end
 
+    it "should check non existence of files" do
+      story = Ffnpdf::Story.new("1234567")
+      story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+      story.pull_story
+      story = Ffnpdf::Story.new("1234567")
+      story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+      FileUtils.rm("1234567/0001.md")
+      FileUtils.rm("1234567/0000.md")
+      story.check_story_dir.should == false
+      story.error.should == "Story folder does not have markdown files (1234567/)"
+    end
+
     it "should check existence of directory" do
       story = Ffnpdf::Story.new("1234567")
       story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
@@ -71,6 +86,7 @@ describe Ffnpdf::Story do
       story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
       story.check_story_dir.should == true
     end
+
   end
 
   context "pulling multi" do
@@ -94,5 +110,29 @@ describe Ffnpdf::Story do
       File.should exist("0000001/0002.md")
       File.should exist("0000001/0003.md")
     end
+  end
+
+  context "building multi" do
+    before :each do
+      @story = Ffnpdf::Story.new("0000001")
+      @story.custom_url = "http://bryanbibat.github.com/ffnpdf-test/"
+    end
+
+    after :each do
+      if File.directory?("0000001") 
+        #FileUtils.rm_rf("0000001")
+      end
+    end
+
+    it "should build a story" do
+      pwd = Dir.pwd
+      @story.pull_story
+      Dir.pwd.should == pwd
+      @story.build_story
+      Dir.pwd.should == pwd
+      File.should exist("0000001/combined.md")
+      File.should exist("0000001/combined.pdf")
+    end
+
   end
 end

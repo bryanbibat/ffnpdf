@@ -5,7 +5,7 @@ module Ffnpdf
       if argv.size == 0
         invalid = true
       elsif /^[\d]+$/.match argv[0]
-        story = Ffnpdf::Story.new(argv[1])
+        story = Ffnpdf::Story.new(argv[0])
         if story.check_story
           story.pull_story
           story.build_story

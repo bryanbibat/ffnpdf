@@ -60,7 +60,7 @@ This command does only the second step of the Build i.e. converts `combined.md` 
 
 ## Known Issues
 
-**Line following a horizontal line (<hr>) is missing**
+**Line following a horizontal line (\<hr\>) is missing**
 
 This is a problem with FF.net's rendering of stories, especially in older ones.
 

@@ -30,6 +30,11 @@ module Ffnpdf
         return false
       end
 
+      unless Nokogiri::HTML(test_pull.body).css(".storytext")
+        @error = "Story does not exist (#{story_url})"
+        return false
+      end
+
       true
     end
 

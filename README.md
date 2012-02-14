@@ -57,3 +57,9 @@ This command
     ffnpdf convert [STORY_ID]
 
 This command does only the second step of the Build i.e. converts `combined.md` to `combined.pdf`.
+
+## Troubleshooting
+
+**Table of Contents don't match the actual pages of the chapters.**
+
+[This is a LaTeX issue](http://tex.stackexchange.com/a/30946). Just rerun the `ffnpdf convert` command to rebuild the PDF.

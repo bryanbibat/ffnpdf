@@ -52,7 +52,7 @@ This command
 * combines all `.md` files to a single file, `combined.md`, in alphabetical order
 * converts `combined.md` to `combined.pdf` while using both the template and variables file
 
-### Build
+### Convert
 
     ffnpdf convert [STORY_ID]
 

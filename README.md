@@ -60,12 +60,6 @@ This command does only the second step of the Build i.e. converts `combined.md` 
 
 ## Known Issues
 
-**Line following a horizontal line (\<hr\>) is missing**
-
-This is a problem with FF.net's rendering of stories, especially in older ones.
-
-At the moment, the only fix is to manually edit the `.md` files to add the missing lines.
-
 **Page numbering in bookmark is incorrect for stories with long Table of Contents**
 
 It's a tradeoff between wrong numbering in the Table of Contents or in the bookmarks. I chose the latter.

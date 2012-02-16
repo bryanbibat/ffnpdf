@@ -1,7 +1,6 @@
 require 'httparty'
 require 'nokogiri'
 require 'fileutils'
-require 'open3'
 
 module Ffnpdf
   class Story
@@ -67,43 +66,23 @@ module Ffnpdf
       FileUtils.mkdir_p @story_id
       Dir.chdir @story_id
       
-      tempfile = File.new("temp.html", "w")
-      puts "pulling first chapter"
-      pull = HTTParty.get(story_url)
-      doc = Nokogiri::HTML(pull.body)
-      doc.css(".storytext")[0].children.each do |paragraph|
-        if /^<(p|hr|i|b)/.match paragraph.to_s
-          tempfile.puts paragraph
-        end
-      end
-      tempfile.close
+      chapter1 = Chapter.new(story_url, 1)
+      chapter1.pull_and_convert
 
-      Converter.exec 'pandoc temp.html -o 0001.md'
+      doc = chapter1.doc
 
       title = doc.xpath("//div/div/b")[0].text
       author = doc.xpath("//div/table//a[not(@title or @onclick)]")[0].text
 
       generate_template(title, author, get_doc_date(doc))
       generate_variables_file
-      generate_title_page
+      generate_title_page(chapter1.chapter_title)
 
       chapters = doc.xpath('//form//select[@name="chapter"]/option').count
-      if chapters > 1
-        append_header_to_ch1
 
+      if chapters > 1
         (2..chapters).each do |chapter| 
-          puts "pulling chapter #{chapter}"
-          tempfile = File.new("temp.html", "w")
-          tempfile.puts "<h2>Chapter #{chapter}</h2>"
-          pull = HTTParty.get("#{story_url}#{chapter}/")
-          doc = Nokogiri::HTML(pull.body)
-          doc.css(".storytext")[0].children.each do |paragraph|
-            if /^<(p|hr|i|b)/.match paragraph.to_s
-              tempfile.puts paragraph
-            end
-          end
-          tempfile.close
-          Converter.exec("pandoc temp.html -o #{"%04d" % chapter}.md")
+          Chapter.new("#{story_url}#{chapter}/", chapter).pull_and_convert
         end
       end
       Dir.chdir "../" 
@@ -126,7 +105,6 @@ module Ffnpdf
 % Shamelessly ripped off from https://github.com/karlseguin/the-little-mongodb-book
 \\documentclass[$fontsize$,$columns$]{book}
 \\usepackage{fullpage}
-\\usepackage{changepage}
 \\usepackage{fontspec,xltxtra,xunicode}
 \\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
 \\setmainfont{$mainfont$}
@@ -138,7 +116,7 @@ module Ffnpdf
 \\linespread{1.2}
 
 \\usepackage{listings}
-\\usepackage[dvipsnames,usenames]{color}
+\\usepackage[dvipsnames,usenames]{xcolor}
 
 $if(fancy-enums)$
 \\usepackage{enumerate}
@@ -171,31 +149,18 @@ $body$
       variables.close
     end
 
-    def generate_title_page
+    def generate_title_page(has_toc = true)
       title_page = File.new("0000.md", "w")
-      contents = <<-CONTENTS
-\\maketitle
+      title = "\\maketitle\n"
+      if has_toc
+        title += <<-CONTENTS
 \\pagenumbering{roman}
 \\tableofcontents
 
-      CONTENTS
-      title_page.puts(contents)
-      title_page.close
-    end
-
-    def append_header_to_ch1
-      chapter1 = File.new("0001.temp", "w")
-      chapter1.puts "\\pagenumbering{arabic}"
-      chapter1.puts "\\setcounter{page}{1}"
-      chapter1.puts
-      chapter1.puts "\#\# Chapter 1"
-      chapter1.puts
-      IO.foreach("0001.md") do |line|
-        chapter1.puts line
+        CONTENTS
       end
-      chapter1.close
-      FileUtils.rm("0001.md")
-      File.rename("0001.temp", "0001.md")
+      title_page.puts(title)
+      title_page.close
     end
 
     def build_story

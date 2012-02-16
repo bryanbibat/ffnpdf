@@ -21,8 +21,8 @@ module Ffnpdf
       puts "pulling chapter #{chapter}"
       pull = HTTParty.get(story_url)
       self.doc = Nokogiri::HTML(pull.body)
-      content = doc.css(".storytext")[0].to_s
-      content = content.gsub(/<div class="a2a_kit[.]*\/div>/, "")
+      content = doc.css(".storytext")[0].inner_html
+      content = content.gsub(/<div class.*?\/div>/m, "")
       content = content.gsub(/<hr.*>/, "<hr/><p>")
       puts "saving as #{padded_ch}.html"
       tempfile = File.new("#{padded_ch}.html", "w")
@@ -61,7 +61,7 @@ module Ffnpdf
 
     def chapter_title
       if doc.xpath('//form//select[@name="chapter"]/option').count > 1
-        doc.xpath('//form//select[@name="chapter"]/option')[chapter - 1].text
+        doc.xpath('//form//select[@name="chapter"]/option')[chapter - 1].text.gsub(/^[\d]*?\. /, "")
       else
         nil
       end

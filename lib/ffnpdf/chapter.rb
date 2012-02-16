@@ -23,7 +23,7 @@ module Ffnpdf
       self.doc = Nokogiri::HTML(pull.body)
       content = doc.css(".storytext")[0].inner_html
       content = content.gsub(/<div class.*?\/div>/m, "")
-      content = content.gsub(/<hr.*>/, "<hr/><p>")
+      content = content.gsub(/<hr.*?>/, "<hr/><p>")
       puts "saving as #{padded_ch}.html"
       tempfile = File.new("#{padded_ch}.html", "w")
       tempfile.puts(content)

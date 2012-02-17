@@ -6,9 +6,15 @@ This gem scrapes stories from FanFiction.net and generates LaTeX PDFs. Polished 
 
 ## Installation
 
-To install this stupid gem:
+Ruby hackers already know how to install this stupid gem. But for everyone else, here's how to install it in Ubuntu.
 
-    gem install ffnpdf
+First install [Ruby](http://www.ruby-lang.org). I'm guessing the gem won't work with ruby 1.8 so you'll need to install ruby 1.9:
+
+    sudo apt-get install ruby1.9.1 ruby1.9.1-dev build-essential libxml2 libxml2-dev libxslt1-dev
+    
+Then install the gem via `gem install`:
+
+    sudo gem install ffnpdf
 
 It also requires [pandoc](http://johnmacfarlane.net/pandoc/) as well as a bunch of extra stuff related to LaTeX/XeTeX. In Ubuntu, you can install this using the following command:
 

@@ -64,6 +64,10 @@ This command
 
 This command does only the second step of the Build i.e. converts `combined.md` to `combined.pdf`.
 
+## How-To Videos
+
+I've made a YouTube playlist with demos and how-tos [here](http://www.youtube.com/playlist?list=PLA7C6F157E1651A69).
+
 ## Known Issues
 
 **Page numbering in bookmark is incorrect for stories with long Table of Contents**

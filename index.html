@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ffnpdf : converts fanfiction.net stories into classy LaTeX pdf" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ffnpdf</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bryanbibat/ffnpdf">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Ffnpdf</h1>
+          <h2 id="project_tagline">converts fanfiction.net stories into classy LaTeX pdf</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/bryanbibat/ffnpdf/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/bryanbibat/ffnpdf/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>FFNPDF</h1>
+
+<p>Just scratched an coding itch I've had for quite some time.</p>
+
+<p>This gem scrapes stories from FanFiction.net and generates LaTeX PDFs. Polished turds, anyone?</p>
+
+<h2>Installation</h2>
+
+<p>Ruby hackers already know how to install this stupid gem. But for everyone else, here's how to install it in Ubuntu.</p>
+
+<p>First install <a href="http://www.ruby-lang.org">Ruby</a>. I'm guessing the gem won't work with ruby 1.8 so you'll need to install ruby 1.9:</p>
+
+<pre><code>sudo apt-get install ruby1.9.1 ruby1.9.1-dev build-essential libxml2 libxml2-dev libxslt1-dev
+</code></pre>
+
+<p>Then install the gem via <code>gem install</code>:</p>
+
+<pre><code>sudo gem install ffnpdf
+</code></pre>
+
+<p>It also requires <a href="http://johnmacfarlane.net/pandoc/">pandoc</a> as well as a bunch of extra stuff related to LaTeX/XeTeX. In Ubuntu, you can install this using the following command:</p>
+
+<pre><code>sudo apt-get install pandoc texlive-latex-extra texlive-xetex
+</code></pre>
+
+<p>It also uses <a href="http://dejavu-fonts.org/wiki/Main_Page">DejaVu Fonts</a> as the default font. This font family is installed by default in Ubuntu.</p>
+
+<h2>Usage</h2>
+
+<p>The basic command only requires the story's story ID.</p>
+
+<pre><code>ffnpdf [STORY_ID]
+</code></pre>
+
+<p>This will scrape FFN for the story, convert the chapters into markdown, combine all chapters into a single file, and converts it into PDF, all inside the <code>STORY_ID</code> folder.</p>
+
+<h2>Additional Commands</h2>
+
+<p>Since you may want to do your own edits to the fics (e.g. remove authors notes, correct chapter headers) there are additional commands that allow you to perform individual steps of the process.</p>
+
+<h3>Pull</h3>
+
+<pre><code>ffnpdf pull [STORY_ID]
+</code></pre>
+
+<p>This command </p>
+
+<ul>
+<li>creates the <code>STORY_ID</code> folder</li>
+<li>pulls chapters and converts them to Markdown</li>
+<li>creates template and variables (config) file</li>
+</ul><p>The markdown files are numbered from <code>0001.md</code> onwards. A title section, <code>0000.md</code>, is also created.</p>
+
+<p>The <code>xetex.template</code> file is obviously the XeTeX template, while the <code>variables.txt</code> defines the <a href="http://johnmacfarlane.net/pandoc/README.html#general-writer-options">template variables section</a> used when generating the PDF. Both can be modified to affect the result of running both <code>ffnpdf build</code> and <code>ffnpdf convert</code>.</p>
+
+<h3>Build</h3>
+
+<pre><code>ffnpdf build [STORY_ID]
+</code></pre>
+
+<p>This command </p>
+
+<ul>
+<li>combines all <code>.md</code> files to a single file, <code>combined.md</code>, in alphabetical order</li>
+<li>converts <code>combined.md</code> to <code>combined.pdf</code> while using both the template and variables file</li>
+</ul><h3>Convert</h3>
+
+<pre><code>ffnpdf convert [STORY_ID]
+</code></pre>
+
+<p>This command does only the second step of the Build i.e. converts <code>combined.md</code> to <code>combined.pdf</code>.</p>
+
+<h2>How-To Videos</h2>
+
+<p>I've made a YouTube playlist with demos and how-tos <a href="http://www.youtube.com/playlist?list=PLA7C6F157E1651A69">here</a>.</p>
+
+<h2>Known Issues</h2>
+
+<p><strong>Page numbering in bookmark is incorrect for stories with long Table of Contents</strong></p>
+
+<p>It's a tradeoff between wrong numbering in the Table of Contents or in the bookmarks. I chose the latter.</p>
+
+<p>I still don't know the root cause, though.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ffnpdf maintained by <a href="https://github.com/bryanbibat">bryanbibat</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -1,3 +1,7 @@
+### 0.0.6
+
+* make the gem work again (stopped working due to the change in page layout)
+
 ### 0.0.5
 
 * fixed `hr` parsing

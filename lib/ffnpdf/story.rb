@@ -71,7 +71,7 @@ module Ffnpdf
 
       doc = chapter1.doc
 
-      title = doc.xpath("//div/div/b")[0].text
+      title = doc.xpath("//div/table//b")[0].text
       author = doc.xpath("//div/table//a[not(@title or @onclick)]")[0].text
 
       generate_template(title, author, get_doc_date(doc))
@@ -89,7 +89,7 @@ module Ffnpdf
     end
 
     def get_doc_date(doc)
-      parsing = doc.xpath('//div[@style="padding-left:1em;padding-right:1em;padding-top:0.5em;"]')[0].text
+      parsing = doc.xpath('//div[@style="color:gray;"]')[0].text
       match = /Updated: (.{8})/.match parsing
       if match
         return Date.strptime(match[1], "%m-%d-%y").strftime("%d %B %Y")
